@@ -1,73 +1,67 @@
-# Kinsta Must Use (MU) Plugin
+# Kinsta MU Plugins
 
-A simple mirror of the official Kinsta Mu Plugin with added Composer/[Bedrock](https://github.com/roots/bedrock) support.
+This repository contains the Kinsta Must-Use Plugins, automatically synced from the official Kinsta distribution.
 
-For latest version/info please see the official [Kinsta MU Plugin page](https://kinsta.com/docs/wordpress-hosting/kinsta-mu-plugin).
+## About
 
-## Installing with Composer (for Bedrock)
+This is a mirror repository that automatically downloads and tracks updates from the official Kinsta MU Plugin package available at: https://kinsta.com/kinsta-tools/kinsta-mu-plugins.zip
 
-1. Add this plugin repo to `repositories`in your Bedrock `composer.json` file:
-    ```diff
-      "repositories": {
-        "wpackagist": {
-          "type": "composer",
-          "url": "https://wpackagist.org",
-          "only": [
-            "wpackagist-plugin/*",
-            "wpackagist-theme/*"
-          ]
-        },
-    +   "kinsta-mu-plugins": {
-    +     "type": "vcs",
-    +     "url": "git@github.com:retlehs/kinsta-mu-plugins"
-    +   },
-    ```
-1. Add the plugin requirement with specific version number (or `*` for latest) to `composer.json`:
-    ```diff
-      "require": {
-        "php": ">=7.4",
-        "composer/installers": "^2.0",
-        ...
-    +   "kinsta/kinsta-mu-plugins": "*",
-        ...
-      }
-    ```
-1. Run `composer update` from the Bedrock directory.
+The repository is automatically updated weekly via GitHub Actions when a new version is detected.
 
+## Usage with Composer
 
-## White label
+You can use this repository as a VCS package in your Composer-based WordPress project instead of manually downloading the zip file.
 
-Enabling white labeling will change the following elements in the WordPress dashboard:
+### Add to composer.json
 
-1. The branded **Kinsta Cache** sidebar link will be changed to an unbranded **Cache Settings** link.
-1. The **Thanks for creating with WordPress and hosting with Kinsta** message near the bottom of the dashboard will be replaced with **Thank you for creating with WordPress**.
-1. The Kinsta logo on the **Cache Control** page will be removed or replaced with an image of your choice.
-1. The links to Kinsta documentation and support will be removed.
+Add this repository to your `composer.json`:
 
-```php
-define('KINSTAMU_WHITELABEL', true);
-define('KINSTAMU_LOGO', 'https://mylogo.com/mylogo.jpg');
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/yourdigitaltoolbox/kinsta-mu-plugin"
+        }
+    ],
+    "require": {
+        "kinsta/kinsta-mu-plugins": "^3.2"
+    },
+}
 ```
 
-For more info, refer to the [official docs here](https://kinsta.com/docs/wordpress-hosting/kinsta-mu-plugin#white-label-and-customize-the-kinsta-mu-plugin)
+### Install
 
-
-## Bedrock + Kinsta
-The following constants may be required to fix issues with CDN paths + shared plugin asset URLs.
-
-```php
-/**
- * Kinsta CDN fix for Bedrock
- */
-define('KINSTA_CDN_USERDIRS', 'app');
-
-/**
- * Fix Kinsta MU Plugins URL path with Bedrock
- */
-$mu_plugins_url = Config::get('WP_CONTENT_URL') . '/mu-plugins';
-define('KINSTAMU_CUSTOM_MUPLUGIN_URL', "{$mu_plugins_url}/kinsta-mu-plugins");
+```bash
+composer install
 ```
 
-## Changelog
+This will automatically install the latest version of the Kinsta MU Plugin into your mu-plugins directory.
 
-https://kinsta.com/changelog/mu-plugin-changelog/
+## Automatic Updates
+
+The repository uses GitHub Actions to automatically:
+
+1. Check for updates weekly (every Monday at 9:00 AM UTC)
+2. Download the latest version from Kinsta
+3. Compare versions and update if necessary
+4. Commit changes and create version tags
+5. Preserve repository-specific files (`.git`, `.github`, `README.md`, `composer.json`, `.gitignore`, `.gitattributes`)
+
+The `.gitattributes` file ensures that when installed via Composer, only the essential plugin files are included, excluding development files like `.github/` workflows.
+
+You can also manually trigger the update workflow from the GitHub Actions tab.
+
+## Version History
+
+Version tags are automatically created for each update, allowing you to pin to specific versions or use version constraints in Composer.
+
+## License
+
+This plugin is provided by Kinsta. Please refer to Kinsta's terms of service for licensing information.
+
+## Support
+
+For support with the Kinsta MU Plugin itself, please contact [Kinsta Support](https://kinsta.com/help/).
+
+For issues with this repository or the automated updates, please open an issue on GitHub.
